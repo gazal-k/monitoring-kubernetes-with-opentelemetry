@@ -1,0 +1,33 @@
+{{- if eq .Values.autoInstrumentation.enabled true -}}
+apiVersion: opentelemetry.io/v1alpha1
+kind: Instrumentation
+metadata:
+  name: {{ include "nrotel.autoInstrumentationName" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  exporter:
+    # send to grpc endpoint by default
+    endpoint: http://{{ include "nrotel.deploymentNameReceiver" . }}-collector.{{ .Release.Namespace }}:4317
+
+  propagators: {{ toYaml .Values.autoInstrumentation.propagators | nindent 2 }}
+
+  sampler: {{ toYaml .Values.autoInstrumentation.sampler | nindent 4 }}
+
+  # Override to use http/proto instead of grpc for the following languages
+  dotnet:
+    env:
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://{{ include "nrotel.deploymentNameReceiver" . }}-collector.{{ .Release.Namespace }}:4318
+  go:
+    env:
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://{{ include "nrotel.deploymentNameReceiver" . }}-collector.{{ .Release.Namespace }}:4318
+  java:
+    env:
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://{{ include "nrotel.deploymentNameReceiver" . }}-collector.{{ .Release.Namespace }}:4318
+  python:
+    env:
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: http://{{ include "nrotel.deploymentNameReceiver" . }}-collector.{{ .Release.Namespace }}:4318
+{{- end -}}

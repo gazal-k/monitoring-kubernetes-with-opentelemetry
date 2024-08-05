@@ -356,3 +356,10 @@ Set name for kube-state-metrics service discovery.
 
 {{- $teams | toYaml -}}
 {{- end -}}
+
+{{/*
+Set name for Auto Instrumentation.
+*/}}
+{{- define "nrotel.autoInstrumentationName" -}}
+{{- printf "%s-%s" (include "nrotel.name" .) "autoinstrumentation" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

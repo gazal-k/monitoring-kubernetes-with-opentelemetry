@@ -1207,6 +1207,16 @@ singleton:
       #   namespaces:
       #     - devteam3
 
+autoInstrumentation:
+  enabled: false
+  propagators:
+  - tracecontext
+  - baggage
+  - b3
+  sampler:
+    type: parentbased_traceidratio
+    argument: "1"
+
 ### DEPENDENCY CONFIG ###
 # You can override default values for the dependency helm charts in this section
 
